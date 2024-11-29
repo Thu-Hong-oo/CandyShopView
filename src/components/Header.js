@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "../assets/css/header.css";
+import CartIcon from "../components/CartIcon";
 
 const Header = () => {
   const [cartCount] = useState(0);
@@ -24,7 +25,7 @@ const Header = () => {
         console.error("Error fetching categories:", error);
       }
     };
-
+    
     fetchCategories();
   }, []);
 
@@ -83,14 +84,7 @@ const Header = () => {
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="/sign-in">
-                    <i className="fa fa-shopping-cart position-relative">
-                      <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        {cartCount}
-                      </span>
-                    </i>
-                    <span>Giỏ hàng</span>
-                  </a>
+                  <CartIcon />
                 </li>
               </ul>
             </nav>

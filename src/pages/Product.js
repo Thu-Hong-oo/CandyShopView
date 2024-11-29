@@ -1,21 +1,38 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Header from "../components/Header";
 import "../assets/css/product.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../redux/slices/cartSlice";
 
-const Product = () => {
+const Product = ({ setCartCount }) => {
+  const dispatch = useDispatch();
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const limit = 12; // Số lượng sản phẩm tối đa trên mỗi trang
   const [loading, setLoading] = useState(true);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const images = [
+    require("../assets/images/banner1.jpg"),
+    require("../assets/images/banner2.jpg"),
+    require("../assets/images/banner3.jpg"),
+  ];
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 2000);
+    return () => clearInterval(interval); // Dọn dẹp khi component unmount
+  }, [images.length]);
   const fetchProducts = async (page) => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/products?page=${page}&limit=${limit}`
+        `http://localhost:8081/api/products?page=${page}&limit=${limit}`
       );
       const data = response.data.data;
+      console.log("data", data);
       setProducts(data.content);
       setTotalPages(data.totalPages);
       setLoading(false);
@@ -26,6 +43,7 @@ const Product = () => {
   };
 
   useEffect(() => {
+    console.log("Fetching products for page:", currentPage);
     fetchProducts(currentPage);
   }, [currentPage]);
 
@@ -33,35 +51,99 @@ const Product = () => {
     setCurrentPage(page);
   };
 
-  if (loading) {
-    return <div>Loading...</div>; // Hiển thị thông báo đang tải
-  }
+  const handleAddToCart = (product) => {
+    if (!product.productId || !product.productName || !product.currentPrice) {
+      alert("Sản phẩm thiếu thông tin, không thể thêm vào giỏ hàng!");
+      return;
+    }
+
+    dispatch(addToCart(product));
+    // alert(`${product.productName} đã được thêm vào giỏ hàng!`);
+  };
 
   return (
     <div className="container-fluid px-0">
-      <Header />
+      <div className="banner row px-0">
+        <div
+          id="carouselExampleAutoplaying"
+          className="carousel slide px-0"
+          data-bs-ride="carousel"
+        >
+          <div className="carousel-inner px-0">
+            {images.map((image, index) => (
+              <div
+                className={`carousel-item ${
+                  index === activeIndex ? "active" : ""
+                }`}
+                key={index}
+              >
+                <img
+                  src={image}
+                  className="d-block w-100"
+                  alt={`Banner ${index + 1}`}
+                />
+              </div>
+            ))}
+          </div>
+          <button
+            className="carousel-control-prev"
+            type="button"
+            data-bs-target="#carouselExampleAutoplaying"
+            data-bs-slide="prev"
+          >
+            <span
+              className="carousel-control-prev-icon"
+              aria-hidden="true"
+            ></span>
+            <span className="visually-hidden">Previous</span>
+          </button>
+          <button
+            className="carousel-control-next"
+            type="button"
+            data-bs-target="#carouselExampleAutoplaying"
+            data-bs-slide="next"
+          >
+            <span
+              className="carousel-control-next-icon"
+              aria-hidden="true"
+            ></span>
+            <span className="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+
       <div className="product">
-        <h3>Sản Phẩm</h3>
         <div className="row">
           {products.length > 0 ? (
             products.map((product) => (
               <div className="product-card" key={product.productId}>
-                <img
-                  src={product.mainImageUrl}
-                  alt={product.productName}
-                  className="product-image"
-                />
-                <h3 className="product-name">{product.productName}</h3>
-                  <p className="product-price">
+                <div className="image-container">
+                  <img
+                    src={product.mainImageUrl}
+                    alt={product.productName}
+                    className="product-image"
+                  />
+                  <div className="overlay">
+                    <h3>Xem chi tiết</h3>
+                  </div>
+                </div>
+
+                <div className="product-info">
+                  <h5 className="product-name">{product.productName}</h5>
+                  <p className="product-price mt-2 ">
                     {product.currentPrice.newPrice.toLocaleString()} VND
-                </p>
-                <div className="overlay">
-                  <h3 className="product-name">Xem chi tiết</h3>
+                    <button
+                      onClick={() => handleAddToCart(product)}
+                      style={{ marginLeft: "10px" }}
+                    >
+                      <FontAwesomeIcon icon={faShoppingCart} />
+                    </button>
+                  </p>
                 </div>
               </div>
             ))
           ) : (
-            <div className="col">
+            <div className="col text-center">
               <p>Không có sản phẩm nào.</p>
             </div>
           )}

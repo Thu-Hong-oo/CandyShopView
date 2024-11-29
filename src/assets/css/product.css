@@ -59,7 +59,6 @@ span {
   height: 270px;
 }
 
-
 h3 {
   margin: 0px 0px 50px;
   text-align: center;
@@ -74,7 +73,7 @@ h3 {
   margin: 0 auto; /* Căn giữa container */
 }
 
-.product .row{
+.product .row {
   justify-content: center;
   width: 100%;
   padding-bottom: 50px;
@@ -87,9 +86,8 @@ h3 {
   margin: 10px; /* Khoảng cách giữa các sản phẩm */
   max-width: 300px; /* Chiều rộng tối đa cho mỗi sản phẩm */
   border-radius: 30px;
-  background-color: #FFFAF0;
+  background-color: #fffaf0;
 }
-
 
 .product-card:hover .product-image {
   transform: scale(1.1); /* Phóng to ảnh khi hover */
@@ -100,7 +98,6 @@ h3 {
   height: auto; /* Chiều cao tự động */
   transition: transform 0.3s ease; /* Hiệu ứng chuyển động khi hover */
 }
-
 
 .overlay {
   position: absolute; /* Đặt overlay lên trên ảnh */
@@ -118,12 +115,16 @@ h3 {
   transition: opacity 0.3s ease; /* Hiệu ứng chuyển động khi hover */
 }
 
-.product-card:hover .overlay {
+.image-container:hover .overlay {
   opacity: 1; /* Hiện overlay khi hover */
 }
+.product-info {
+  position: relative;
+  z-index: 2; /* Đảm bảo phần này luôn ở trên overlay */
+}
 
-
-.product-name, .product-price {
+.product-name,
+.product-price {
   margin: 0; /* Bỏ margin cho các phần tử chữ */
   text-align: center; /* Căn giữa chữ */
 }
@@ -133,7 +134,7 @@ h3 {
 }
 
 .product-price {
-  text-shadow: 0 0 5px white, 0 0 10px white; 
+  text-shadow: 0 0 5px white, 0 0 10px white;
 }
 
 .card-footer a {
@@ -187,9 +188,4 @@ h3 {
 .active .page-link:hover {
   color: white;
   background-color: #3d1a1a;
-}
-
-/* Overlay */
-.overlay {
-  background-color: #0009;
 }

@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import "../assets/css/signIn.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Header from "../components/Header";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const SignIn = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMesage,setErrorMessage] = useState("");
+  const [errorMesage, setErrorMessage] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState(""); // State to hold error message
   const formRef = useRef(null);
@@ -51,9 +50,7 @@ const SignIn = () => {
   }, []);
 
   return (
-    <div className="container-fluid px-0">
-      <Header />
-
+    <div className=" container-fluid px-0 ">
       <div className="d-flex justify-content-center align-items-center my-5">
         <div className="row border rounded-5 p-3 bg-white shadow box-area">
           {/* Left */}
@@ -83,7 +80,7 @@ const SignIn = () => {
                     type="text"
                     className="form-control form-control-lg bg-light fs-6"
                     name="username"
-                    placeholder="Email"
+                    placeholder="Tên đăng nhập"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required // Thêm thuộc tính required
