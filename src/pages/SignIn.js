@@ -36,6 +36,7 @@ const SignIn = () => {
         const data = await response.json();
         console.log("Login successful:", data);
         localStorage.setItem("token", data.data.token); // Lưu token vào localStorage
+        localStorage.setItem("userId", data.data.userId);
         setError(""); // Xóa lỗi trước đó
         navigate("/product"); // Chuyển hướng người dùng đến trang sản phẩm
       }

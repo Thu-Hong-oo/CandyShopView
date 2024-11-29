@@ -9,6 +9,7 @@ const Header = () => {
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState({});
   const [hoveredCategory, setHoveredCategory] = useState(null);
+  const [isLoggedIn, setIsLoggedIn]= useState(false);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -27,6 +28,12 @@ const Header = () => {
     };
     
     fetchCategories();
+
+    const checkLoginStatus=()=>{
+      const user= localStorage.getItem("userId");
+      setIsLoggedIn(user?true:false);
+    };
+    checkLoginStatus();
   }, []);
 
   const handleCategoryHover = async (categoryId) => {
@@ -47,6 +54,8 @@ const Header = () => {
       console.error("Error fetching subcategories:", error);
     }
   };
+
+
 
   return (
     <div className="container-fluid px-0">
@@ -78,7 +87,7 @@ const Header = () => {
                   </a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="/sign-in">
+                  <a className="nav-link" href={isLoggedIn?"/profile":"/sign-in"}>
                     <i className="fa fa-user"></i>
                     <span>Tài Khoản</span>
                   </a>
